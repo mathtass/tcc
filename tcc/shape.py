@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 import pdb
 
-img = cv2.imread('escorpiao.png')
+img = cv2.imread('esc.png')
 imgGrey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 _, thrash = cv2.threshold(imgGrey, 155, 255, cv2.THRESH_BINARY)
 contours, _ = cv2.findContours(thrash, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
