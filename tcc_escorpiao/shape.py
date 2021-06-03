@@ -2,7 +2,8 @@ import numpy as np
 import cv2
 import pdb
 
-img = cv2.imread('esc.png')
+escorpiao = False
+img = cv2.imread('escorpiao22.png')
 imgGrey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
 _, thrash = cv2.threshold(imgGrey, 155, 255, cv2.THRESH_BINARY)
 contours, _ = cv2.findContours(thrash, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
@@ -21,6 +22,8 @@ for contour in contours:
 
     if len(approx) == 24 or len(approx) == 23: 
         cv2.putText(img, "Escorpiao", (x, y), cv2.FONT_HERSHEY_COMPLEX, 0.8, (1, 0, 0))
+        escorpiao = True
+        print("Escorpiao foi encontrado")
     # else:
     #     cv2.putText(img, "Circle", (x, y), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 0))
 

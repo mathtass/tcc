@@ -3,8 +3,7 @@ import numpy as np
 import pdb
 
 
-img = cv2.imread('escorpiao.png')
-
+img = cv2.imread('escorpiao22.png')
 hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
 
 ## mask of green (36,25,25) ~ (86, 255,255)
