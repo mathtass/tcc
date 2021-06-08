@@ -1,14 +1,48 @@
+{% load static %}
 <html>
+<head>
+<title>TCC Detector Escorpiao</title>
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+<link rel="stylesheet" href="{% static 'css/tcc.css' %}">
+<style>
+table {
+  font-family: arial, sans-serif;
+  border-collapse: collapse;
+  width: 100%;
+}
+
+td, th {
+  border: 1px solid #dddddd;
+  text-align: left;
+  padding: 8px;
+}
+
+tr:nth-child(even) {
+  background-color: #dddddd;
+}
+</style>
+</head>
+
 <body>
-    <p>Hi there!</p>
-    <p> {{escorpiao}} </p>
+ <div class="page-header">
+    <h1>Detector de Escorpiões</h1>
+  </div>
 
 
-  {% for esc in escorpiao %}
-    <div>
-        <p>{{ esc.presenca }}</p>
-        <p>{{ esc.data_encontro }}</p>
-    </div>
-        {% endfor %} 
+<table>
+  <tr>
+   <h1> <th>Presença Escorpião</th></h1>
+    <th>Data detecção </th>
+  </tr>
+    {% for esc in escorpiao %}
+  <tr>
+    <td>{{ esc.presenca }}</td>
+    <td>{{ esc.data_encontro }}</td>
+  </tr>
+  {% endfor %} 
+</table>
+
+  
 </body>
 </html>

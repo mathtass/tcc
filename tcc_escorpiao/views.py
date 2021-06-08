@@ -29,18 +29,27 @@ def tela(request):
             cv2.putText(img, "Escorpiao", (x, y), cv2.FONT_HERSHEY_COMPLEX, 0.8, (1, 0, 0))
             escorpiao = True
             print("Escorpiao foi encontrado")
-            
-        # else:
-        #     cv2.putText(img, "Circle", (x, y), cv2.FONT_HERSHEY_COMPLEX, 0.5, (0, 0, 0))
-    # pdb.set_trace()
+        if (escorpiao == False):
+            hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
+            lower_range = np.array([50,252,252])
+            upper_range = np.array([175, 255,252])
+
+            mask = cv2.inRange(hsv, lower_range, upper_range)
+
+            if cv2.countNonZero(mask) > 0:
+                print('Escorpiao presente')
+                escorpiao = True
+            else:
+                print('Escorpiao nao encontrado')    
+
 
 
    
     # if (escorpiao == True):
-    #     Escorpiao.objects.create(presenca="Presenca de escorpiao detectada.",data_encontro=timezone.now())
+    #     Escorpiao.objects.create(presenca="Presença de escorpião detectada.",data_encontro=timezone.now())
     escorpiao_query = Escorpiao.objects.all()
-    cv2.imshow("shapes", img)
-    cv2.waitKey(0)
+    # cv2.imshow("shapes", img)
+    # cv2.waitKey(0)
     # cv2.destroyAllWindows()
     return render(request, 'tcc_escorpiao/tela.html',  {'escorpiao': escorpiao_query})
 
