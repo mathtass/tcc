@@ -63,7 +63,7 @@ def tela(request):
 
 def video(request):
     escorpiao = False
-    cap = cv2.VideoCapture('video.mp4')
+    cap = cv2.VideoCapture('video2.mp4')
 
     while(True):
         try:
@@ -82,6 +82,7 @@ def video(request):
             
             # Write the frame into the file 'captured_video.avi'
             # video_output.write(output)
+            cv2.imshow('output',output)
 
             # Display the frame, saved in the file   
     
