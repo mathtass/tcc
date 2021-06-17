@@ -13,32 +13,33 @@ def tela(request):
     _, thrash = cv2.threshold(imgGrey, 155, 255, cv2.THRESH_BINARY)
     contours, _ = cv2.findContours(thrash, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
 
-    cv2.imshow("img", img)
-    cv2.imshow("imgGrey", imgGrey)
-
 
     for contour in contours:
         approx = cv2.approxPolyDP(contour, 0.01* cv2.arcLength(contour, True), True)
         cv2.drawContours(img, [approx], 0, (0, 0, 0), 5)
         x = approx.ravel()[0]
         y = approx.ravel()[1] - 5
-        print(len(approx))
+
     
 
         if len(approx) == 24 or len(approx) == 23: 
             cv2.putText(img, "Escorpiao", (x, y), cv2.FONT_HERSHEY_COMPLEX, 0.8, (1, 0, 0))
             escorpiao = True
+            Escorpiao.objects.create(presenca="Presença de escorpião detectada pelo seu formato.",data_encontro=timezone.now())
             print("Escorpiao foi encontrado")
+
         if (escorpiao == False):
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
-            lower_range = np.array([50,252,252])
-            upper_range = np.array([175, 255,252])
+            lower_range = np.array([0,0,0])
+            upper_range = np.array([114, 255,255])
 
             mask = cv2.inRange(hsv, lower_range, upper_range)
 
             if cv2.countNonZero(mask) > 0:
-                print('Escorpiao presente')
+                Escorpiao.objects.create(presenca="Presença de escorpião detectada pela sua cor.",data_encontro=timezone.now())
                 escorpiao = True
+                # cv2.imshow('image', img)
+                # cv2.imshow('mask', mask)
             else:
                 print('Escorpiao nao encontrado')    
 
