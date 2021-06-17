@@ -8,7 +8,7 @@ from django.utils import timezone
 # Create your views here.
 def tela(request):
     escorpiao = False
-    img = cv2.imread('esc.png')
+    img = cv2.imread('foto_real.png')
     imgGrey = cv2.cvtColor(img, cv2.COLOR_BGR2GRAY)
     _, thrash = cv2.threshold(imgGrey, 155, 255, cv2.THRESH_BINARY)
     contours, _ = cv2.findContours(thrash, cv2.RETR_TREE, cv2.CHAIN_APPROX_NONE)
@@ -27,8 +27,13 @@ def tela(request):
             escorpiao = True
             Escorpiao.objects.create(presenca="Presença de escorpião detectada pelo seu formato.",data_encontro=timezone.now())
             print("Escorpiao foi encontrado")
+            # caso queira ver as imagem da mascara que detecta o escorpiao
+            cv2.imshow("shapes", img)
+            cv2.waitKey(0)
+            cv2.destroyAllWindows()
 
         if (escorpiao == False):
+            img = cv2.imread('foto_real.png')
             hsv = cv2.cvtColor(img, cv2.COLOR_BGR2HSV)
             lower_range = np.array([0,0,0])
             upper_range = np.array([114, 255,255])
@@ -38,20 +43,21 @@ def tela(request):
             if cv2.countNonZero(mask) > 0:
                 Escorpiao.objects.create(presenca="Presença de escorpião detectada pela sua cor.",data_encontro=timezone.now())
                 escorpiao = True
-                # cv2.imshow('image', img)
-                # cv2.imshow('mask', mask)
+                # caso queria ver a imagem da mascara que identifica o escorpiao
+                cv2.imshow('image', img)
+                cv2.imshow('mask', mask)
+
+                cv2.waitKey(0)
+                cv2.destroyAllWindows()
             else:
                 print('Escorpiao nao encontrado')    
 
 
 
    
-    # if (escorpiao == True):
-    #     Escorpiao.objects.create(presenca="Presença de escorpião detectada.",data_encontro=timezone.now())
+  
     escorpiao_query = Escorpiao.objects.all()
-    # cv2.imshow("shapes", img)
-    # cv2.waitKey(0)
-    # cv2.destroyAllWindows()
+
     return render(request, 'tcc_escorpiao/tela.html',  {'escorpiao': escorpiao_query})
 
 
@@ -92,7 +98,7 @@ def video(request):
         except:
             break
     if (escorpiao == True):
-        Escorpiao.objects.create(presenca="Presença de escorpião detectada no video",data_encontro=timezone.now())
+        Escorpiao.objects.create(presenca="Presença de escorpião detectada no video.",data_encontro=timezone.now())
     escorpiao_query = Escorpiao.objects.all()
 
     return render(request, 'tcc_escorpiao/tela.html',  {'escorpiao': escorpiao_query})
