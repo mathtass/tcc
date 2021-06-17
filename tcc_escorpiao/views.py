@@ -55,3 +55,44 @@ def tela(request):
     return render(request, 'tcc_escorpiao/tela.html',  {'escorpiao': escorpiao_query})
 
 
+def video(request):
+    escorpiao = False
+    cap = cv2.VideoCapture('video.mp4')
+
+    while(True):
+        try:
+            _, frame = cap.read()                
+            # Convert BGR to HSV
+
+            hsv = cv2.cvtColor(frame, cv2.COLOR_BGR2HSV)
+
+            cor1 = np.array([0,0,0])
+            cor2 = np.array([114, 255,255])
+
+            mask = cv2.inRange(hsv, cor1, cor2)
+
+            # Bitwise-AND mask and original image
+            output = cv2.bitwise_and(frame,frame, mask= mask)
+            
+            # Write the frame into the file 'captured_video.avi'
+            # video_output.write(output)
+
+            # Display the frame, saved in the file   
+    
+
+            # Press Q on keyboard to stop recording
+
+
+            if cv2.countNonZero(mask) > 0:
+                escorpiao = True
+            else:
+                print('Escorpiao nao encontrado')
+            if cv2.waitKey(1) & 0xFF == ord('Q'):
+                break
+        except:
+            break
+    if (escorpiao == True):
+        Escorpiao.objects.create(presenca="Presença de escorpião detectada no video",data_encontro=timezone.now())
+    escorpiao_query = Escorpiao.objects.all()
+
+    return render(request, 'tcc_escorpiao/tela.html',  {'escorpiao': escorpiao_query})
